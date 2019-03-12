@@ -1,0 +1,142 @@
+{
+	"all_points": {
+		"monument": {
+			"x": 7,
+			"y": 1,
+			"coords": {
+				"latitude": 52.282673935069106,
+				"longitude": 104.28143367544139
+			},
+			"delay_time": 5
+		},
+		"pharmacy": {
+			"x": 4,
+			"y": 3,
+			"coords": {
+				"latitude": 52.282374539713466,
+				"longitude": 104.28054854646648
+			},
+			"delay_time": 10
+		},
+		"cafe": {
+			"x": 8,
+			"y": 7,
+			"coords": {
+				"latitude": 52.28148621185799,
+				"longitude": 104.28177163377725
+			},
+			"delay_time": 5
+		},
+		"pizza": {
+			"x": 1,
+			"y": 3,
+			"coords": {
+				"latitude": 52.28228077261808,
+				"longitude": 104.27936837449991
+			},
+			"delay_time": 3
+		},
+		"wooden house": {
+			"x": 1,
+			"y": 6,
+			"coords": {
+				"latitude": 52.281596431286715,
+				"longitude": 104.27944884077036
+			},
+			"delay_time": 10
+		}
+	},
+	"chosen_points": {
+		"monument": {
+			"x": 7,
+			"y": 1,
+			"coords": {
+				"latitude": 52.282673935069106,
+				"longitude": 104.28143367544139
+			},
+			"delay_time": 5
+		},
+		"pharmacy": {
+			"x": 4,
+			"y": 3,
+			"coords": {
+				"latitude": 52.282374539713466,
+				"longitude": 104.28054854646648
+			},
+			"delay_time": 10
+		},
+		"cafe": {
+			"x": 8,
+			"y": 7,
+			"coords": {
+				"latitude": 52.28148621185799,
+				"longitude": 104.28177163377725
+			},
+			"delay_time": 5
+		},
+		"pizza": {
+			"x": 1,
+			"y": 3,
+			"coords": {
+				"latitude": 52.28228077261808,
+				"longitude": 104.27936837449991
+			},
+			"delay_time": 3
+		},
+		"wooden house": {
+			"x": 1,
+			"y": 6,
+			"coords": {
+				"latitude": 52.281596431286715,
+				"longitude": 104.27944884077036
+			},
+			"delay_time": 10
+		}
+	},
+	"graphs": [
+		{
+			"graph_1": {
+				"edges": [
+					{
+						"from_id": "7,1",
+						"to_id": "4,3"
+					},
+					{
+						"from_id": "4,3",
+						"to_id": "8,7"
+					},
+					{
+						"from_id": "8,7",
+						"to_id": "1,3"
+					},
+					{
+						"from_id": "1,3",
+						"to_id": "1,6"
+					}
+				]
+			}
+		},
+		{
+			"graph_2": {
+				"edges": [
+					{
+						"from_id": "7,1",
+						"to _id": "4,3"
+					},
+					{
+						"from_id": "4,3",
+						"to_id": "8,7"
+					},
+					{
+						"from_id": "8,7",
+						"to_id": "1,3"
+					},
+					{
+						"from_id": "1,3",
+						"to_id": "1,6"
+					}
+				]
+			}
+		}
+	]
+}
