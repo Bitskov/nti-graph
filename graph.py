@@ -69,10 +69,10 @@ class Graph:
                 return p
         return None
 
-    def get_point_by_id(self, id):
+    def get_point_by_name(self, name):
         # Для JSON понадобилось искать точку по х и у, эта функция для этого
         for p in self.points:
-            if "%i,%i" % (p.x, p.y) == id:
+            if p.name == name:
                 return p
         return None
 
@@ -145,8 +145,8 @@ class Way:
     def fromJSON(name, json_obj, graph):
         points = []
         for element in json_obj['edges']:
-            points.append(graph.get_point_by_id(element["from_id"]))
-        points.append(graph.get_point_by_id(json_obj['edges'][len(json_obj['edges']) - 1]["to_id"]))
+            points.append(graph.get_point_by_name(element["from"]))
+        points.append(graph.get_point_by_name(json_obj['edges'][len(json_obj['edges']) - 1]["to"]))
         return Way(name, points)
 
 
@@ -222,9 +222,10 @@ def simulate(JSON):
     json_obj = JSON
     graph = Graph.fromJSON(json_obj['chosen_points'])
     ways = []
-    for way_obj in list(json_obj['graphs']):
-        key = list(way_obj.keys())[0]
-        way = Way.fromJSON(key, way_obj[key], graph)
+
+    # print(dict(json_obj['graphs']))
+    for key, way_obj in dict(json_obj['graphs']).items():
+        way = Way.fromJSON(key, way_obj, graph)
         ways.append(way)
     # print(graph)
     # print([way.name for way in ways])
@@ -242,32 +243,32 @@ def simulate(JSON):
     # Более сложный спопоб
     n = len(graph.points)
     c = 100 / sum([i + 1 for i in range(len(graph.points))])
-    print(c)
+
     overloads = sorted([graph.points[i].overloaded_coeff for i in range(n)])[::-1]
-    print(overloads)
+
     E1 = c * sum([(n - i) * overloads[i] for i in range(n)])
-    print([(n - i) * overloads[i] for i in range(n)])
+
     # Формирование ответа. Short для детей и Long для стенда
     JSON_RESULT_SHORT = "{" + graph.toJSON(short=True) + ",\n"
     JSON_RESULT_LONG = "{\"all_points\":" + str(json_obj['all_points']).replace("'",
                                                                                 "\"") + ",\n" + graph.toJSON() + ",\n"
 
-    graphs = '"graphs":\n[\n'
+    graphs = '"graphs":\n{\n'
     for way in ways:
-        graphs += '{"%s":[' % way.name
+        graphs += '"%s":[' % way.name
         for i in range(len(way.points)):
             p = way.points[i]
             if p == way.points[0]:
-                graphs += '{"from_id": "%s",' % (str(p.x) + "," + str(p.y))
+                graphs += '{"from": "%s",' % (p.name)
             elif p == way.points[-1]:
-                graphs += '"to_id": "%s", "time": %i}]}' % (str(p.x) + "," + str(p.y), graph.get_edge(p, way.points[i-1]).delay_time)
+                graphs += '"to": "%s", "time": %i}]' % (p.name, graph.get_edge(p, way.points[i-1]).delay_time)
             else:
-                graphs += '"to_id": "%s", "time": %i},{"from_id": "%s",' % (str(p.x) + "," + str(p.y), graph.get_edge(p, way.points[i-1]).delay_time, str(p.x) + "," + str(p.y))
+                graphs += '"to": "%s", "time": %i},{"from": "%s",' % (p.name, graph.get_edge(p, way.points[i-1]).delay_time, p.name)
         if way != ways[-1]:
             graphs += ",\n"
         else:
             graphs += "\n"
-    graphs += "], \"E\": %i}" % int(E1)
+    graphs += "}, \"E\": %i}" % int(E1)
 
     JSON_RESULT_LONG += graphs
     JSON_RESULT_SHORT += graphs
@@ -371,52 +372,108 @@ if __name__ == '__main__':
 			"delay_time": 10
 		}
 	},
-	"graphs": [
-		{
-			"graph_1": {
-				"edges": [
-					{
-						"from_id": "7,1",
-						"to_id": "4,3"
-					},
-					{
-						"from_id": "4,3",
-						"to_id": "8,7"
-					},
-					{
-						"from_id": "8,7",
-						"to_id": "1,3"
-					},
-					{
-						"from_id": "1,3",
-						"to_id": "1,6"
-					}
-				]
-			}
+	"graphs": {
+		"graph_1": {
+			"edges": [
+				{
+					"from": "monument",
+					"to": "pharmacy"
+				},
+				{
+					"from": "pharmacy",
+					"to": "cafe"
+				},
+				{
+					"from": "cafe",
+					"to": "pizza"
+				},
+				{
+					"from": "pizza",
+					"to": "wooden house"
+				}
+			]
 		},
-		{
-			"graph_2": {
-				"edges": [
-					{
-						"from_id": "7,1",
-						"to _id": "4,3"
-					},
-					{
-						"from_id": "4,3",
-						"to_id": "8,7"
-					},
-					{
-						"from_id": "8,7",
-						"to_id": "1,3"
-					},
-					{
-						"from_id": "1,3",
-						"to_id": "1,6"
-					}
-				]
-			}
+		"graph_2": {
+			"edges": [
+				{
+					"from": "pharmacy",
+					"to": "pizza"
+				},
+				{
+					"from": "pizza",
+					"to": "cafe"
+				},
+				{
+					"from": "cafe",
+					"to": "monument"
+				},
+				{
+					"from": "monument",
+					"to": "wooden house"
+				}
+			]
+		},
+		"graph_3": {
+			"edges": [
+				{
+					"from": "cafe",
+					"to": "pharmacy"
+				},
+				{
+					"from": "pharmacy",
+					"to": "monument"
+				},
+				{
+					"from": "monument",
+					"to": "wooden house"
+				},
+				{
+					"from": "wooden house",
+					"to": "pizza"
+				}
+			]
+		},
+		"graph_4": {
+			"edges": [
+				{
+					"from": "cafe",
+					"to": "pharmacy"
+				},
+				{
+					"from": "pharmacy",
+					"to": "monument"
+				},
+				{
+					"from": "monument",
+					"to": "wooden house"
+				},
+				{
+					"from": "wooden house",
+					"to": "pizza"
+				}
+			]
+		},
+		"graph_5": {
+			"edges": [
+				{
+					"from": "cafe",
+					"to": "pharmacy"
+				},
+				{
+					"from": "pharmacy",
+					"to": "monument"
+				},
+				{
+					"from": "monument",
+					"to": "wooden house"
+				},
+				{
+					"from": "wooden house",
+					"to": "pizza"
+				}
+			]
 		}
-	]
+	}
 }"""
     JSONSTR2 = """
     {
@@ -514,139 +571,67 @@ if __name__ == '__main__':
 			"delay_time": 10
 		}
 	},
-	"graphs": [
-		{
-			"graph_1": {
-				"edges": [
-					{
-						"from_id": "7,1",
-						"to_id": "4,3"
-					},
-					{
-						"from_id": "4,3",
-						"to_id": "8,7"
-					},
-					{
-						"from_id": "8,7",
-						"to_id": "1,3"
-					},
-					{
-						"from_id": "1,3",
-						"to_id": "1,6"
-					}
-				]
-			}
+	"graphs": {
+		"graph_1": {
+			"edges": [
+				{
+					"from": "monument",
+					"to": "pharmacy"
+				},
+				{
+					"from": "pharmacy",
+					"to": "cafe"
+				},
+				{
+					"from": "cafe",
+					"to": "pizza"
+				},
+				{
+					"from": "pizza",
+					"to": "wooden house"
+				}
+			]
 		},
-		{
-			"graph_2": {
-				"edges": [
-					{
-						"from_id": "4,3",
-						"to_id": "1,3"
-					},
-					{
-						"from_id": "1,3",
-						"to_id": "8,7"
-					},
-					{
-						"from_id": "8,7",
-						"to_id": "7,1"
-					},
-					{
-						"from_id": "7,1",
-						"to_id": "1,6"
-					}
-				]
-			}
+		"graph_2": {
+			"edges": [
+				{
+					"from": "monument",
+					"to": "pharmacy"
+				},
+				{
+					"from": "pharmacy",
+					"to": "cafe"
+				},
+				{
+					"from": "cafe",
+					"to": "pizza"
+				},
+				{
+					"from": "pizza",
+					"to": "wooden house"
+				}
+			]
 		},
-		{
-			"graph_3": {
-				"edges": [
-					{
-						"from_id": "8,7",
-						"to_id": "4,3"
-					},
-					{
-						"from_id": "4,3",
-						"to_id": "7,1"
-					},
-					{
-						"from_id": "7,1",
-						"to_id": "1,6"
-					},
-					{
-						"from_id": "1,6",
-						"to_id": "1,3"
-					}
-				]
-			}
-		},
-		{
-			"graph_3": {
-				"edges": [
-					{
-						"from_id": "8,7",
-						"to_id": "4,3"
-					},
-					{
-						"from_id": "4,3",
-						"to_id": "7,1"
-					},
-					{
-						"from_id": "7,1",
-						"to_id": "1,6"
-					},
-					{
-						"from_id": "1,6",
-						"to_id": "1,3"
-					}
-				]
-			}
-		},
-		{
-			"graph_4": {
-				"edges": [
-					{
-						"from_id": "1,3",
-						"to_id": "4,3"
-					},
-					{
-						"from_id": "4,3",
-						"to_id": "1,6"
-					},
-					{
-						"from_id": "1,6",
-						"to_id": "7,1"
-					},
-					{
-						"from_id": "7,1",
-						"to_id": "8,7"
-					}
-				]
-			}
-		},
-		{
-			"graph_5": {
-				"edges": [
-					{
-						"from_id": "8,7",
-						"to_id": "4,3"
-					},
-					{
-						"from_id": "4,3",
-						"to_id": "7,1"
-					},
-					{
-						"from_id": "7,1",
-						"to_id": "1,6"
-					},
-					{
-						"from_id": "1,6",
-						"to_id": "1,3"
-					}
-				]
-			}
+		"graph_3": {
+			"edges": [
+				{
+					"from": "monument",
+					"to": "pharmacy"
+				},
+				{
+					"from": "pharmacy",
+					"to": "cafe"
+				},
+				{
+					"from": "cafe",
+					"to": "pizza"
+				},
+				{
+					"from": "pizza",
+					"to": "wooden house"
+				}
+			]
 		}
-	]
+	}
 }"""
     simulate(json.loads(JSONSTR))

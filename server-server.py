@@ -26,4 +26,4 @@ def hello():
     return "<h1>ЫЫЫЫ</h1>"
 
 
-app.run(port=88005)
+app.run(port=25565)
