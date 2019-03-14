@@ -53,7 +53,7 @@ class Graph:
         for i in range(len(points)):
             for j in range(i + 1, len(points)):
                 w = get_dist(points[i].coords, points[j].coords, cheat=CHEAT)
-                self.edges.append(Edge(points[i], points[j], (w / 1.5 + 30) // 60, ))  # Тут примерная формула, которая
+                self.edges.append(Edge(points[i], points[j], 1 if (w / 1.5 + 30) // 60 == 0 else (w / 1.5 + 30) // 60, ))  # Тут примерная формула, которая
                 # должна показывать кол-во минут, за которые проходится ребро
 
     def __str__(self):

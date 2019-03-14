@@ -160,7 +160,9 @@ def calk_route_dist(route, data):
      return answer
 
 
-def get_dist(n1, n2):
+def get_dist(n1, n2, cheat=False):
+    if cheat:
+        return haversine(n1, n2) * 1250
     data = LoadOsm("foot")
     node1 = data.findNode(*n1)
     node2 = data.findNode(*n2)
@@ -176,6 +178,9 @@ if __name__ == "__main__":
   n1 = (52.282673935069106, 104.28143367544139,)
   n2 = (52.282374539713466, 104.28054854646648,)
   n4 = (52.281596431286715, 104.27944884077036,)
+
+  print(get_dist(n1, n2))
+  print(haversine(n1, n2)*1250)
   
   node1 = data.findNode(*n1) #52.282673935069106, 104.28143367544139
   node2 = data.findNode(*n4) #52.282374539713466, 104.28054854646648
