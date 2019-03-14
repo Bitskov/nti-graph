@@ -2,7 +2,6 @@ from pyroutelib2.route import get_dist
 import copy
 import json
 
-
 class Point:
 
     def __init__(self, name, x, y, coords, delay_time):
@@ -53,14 +52,14 @@ class Graph:
         # Ниже считаются все возможные ребра и их веса
         for i in range(len(points)):
             for j in range(i + 1, len(points)):
-                w = get_dist(points[i].coords, points[j].coords)
+                w = get_dist(points[i].coords, points[j].coords, cheat=CHEAT)
                 self.edges.append(Edge(points[i], points[j], (w / 1.5 + 30) // 60, ))  # Тут примерная формула, которая
                 # должна показывать кол-во минут, за которые проходится ребро
 
     def __str__(self):
         s = ""
-        for point in self.points:
-            s += str(point) + "\n"
+        for edge in self.edges:
+            s += str(edge) + "\n"
         return s
 
     def get_point(self, point):
@@ -160,7 +159,6 @@ def simulate_walking(graph, ways):
 
     # Цикл ходьбы
     while True:
-
         finished = 0  # Сколько групп в данный момент закончили маршрут
         change_occupation = []
 
@@ -218,7 +216,10 @@ def simulate_walking(graph, ways):
     return time
 
 
-def simulate(JSON):
+def simulate(JSON, cheat=False):
+    global CHEAT
+    CHEAT = cheat
+
     json_obj = JSON
     graph = Graph.fromJSON(json_obj['chosen_points'])
     ways = []
