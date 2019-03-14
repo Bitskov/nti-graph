@@ -9,11 +9,10 @@ app = Flask(__name__)
 def error406(e):
     resp = make_response("Wrong content-type. \"Application\JSON must be sent\"")
     resp.headers['Access-Control-Allow-Origin'] = '*'
-    resp.headers.append('GET', 'POST', 'OPTIONS')
     return resp
 
 
-@app.route('/test', methods=['GET', 'POST'])
+@app.route('/test', methods=['GET', 'POST', 'OPTIONS'])
 def test():
     if 'Content-Type' not in request.headers.keys() or request.headers['Content-Type'] != 'application/json':
         return abort(406)
@@ -23,6 +22,7 @@ def test():
     #resp = (answer, 200)
     resp = make_response(answer)
     resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Content-Type'] = "application/json"
     return resp
 
 
