@@ -20,7 +20,7 @@ def test():
         resp.headers['Access-Control-Allow-Headers'] = "Content-Type"
         resp.headers['Access-Control-Allow-Methods'] = "POST"
         return resp
-    
+
     if 'Content-Type' not in request.headers.keys() or request.headers['Content-Type'] != 'application/json':
         return abort(406)
 

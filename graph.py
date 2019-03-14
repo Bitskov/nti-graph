@@ -250,7 +250,8 @@ def simulate(JSON):
 
     # Формирование ответа. Short для детей и Long для стенда
     JSON_RESULT_SHORT = "{" + graph.toJSON(short=True) + ",\n"
-    JSON_RESULT_LONG = "{\"all_points\":" + str(json_obj['all_points']).replace("'",
+    JSON_RESULT_LONG = "{\"width\": %i, \"height\": %i, \"all_points\":" % (int(json_obj['width']), int(json_obj['height'])) \
+                                                                                + str(json_obj['all_points']).replace("'",
                                                                                 "\"") + ",\n" + graph.toJSON() + ",\n"
 
     graphs = '"graphs":\n{\n'
