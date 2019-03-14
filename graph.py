@@ -215,7 +215,7 @@ def simulate_walking(graph, ways):
         else:
             time += 1
 
-    return time, ans
+    return time
 
 
 def simulate(JSON):
@@ -229,7 +229,7 @@ def simulate(JSON):
         ways.append(way)
     # print(graph)
     # print([way.name for way in ways])
-    simulate_walking(graph, ways)
+    walk_result = simulate_walking(graph, ways)
     max_overload_time = 1 if sum([i for i in range(len(ways))]) == 0 else sum([i for i in range(len(ways))])
     # print(max_overload_time)
     for point in graph.points:
@@ -268,8 +268,10 @@ def simulate(JSON):
             graphs += ",\n"
         else:
             graphs += "\n"
-    graphs += "}, \"E\": %i}" % int(E1)
-
+    graphs += "}, \"E\": %i, \n \"time\":%i" % (int(E1), int(walk_result))
+    if walk_result >= 120:
+        graphs += ",\"warning\": \"time limit exceeded\""
+    graphs += "}"
     JSON_RESULT_LONG += graphs
     JSON_RESULT_SHORT += graphs
     return JSON_RESULT_LONG
