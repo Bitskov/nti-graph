@@ -14,6 +14,8 @@ def error406(e):
 
 @app.route('/test', methods=['GET', 'POST', 'OPTIONS'])
 def test():
+    if request.method == 'OPTIONS':
+        return "POST"
     if 'Content-Type' not in request.headers.keys() or request.headers['Content-Type'] != 'application/json':
         return abort(406)
 
@@ -22,6 +24,8 @@ def test():
     #resp = (answer, 200)
     resp = make_response(answer)
     resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Access-Control-Allow-Headers'] = ""
+    resp.headers['Access-Control-Allow-Headers'] = ""
     resp.headers['Content-Type'] = "application/json"
     return resp
 
