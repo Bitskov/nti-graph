@@ -9,6 +9,7 @@ app = Flask(__name__)
 def error406(e):
     resp = make_response("Wrong content-type. \"Application\JSON must be sent\"")
     resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers.append('GET', 'POST', 'OPTIONS')
     return resp
 
 
