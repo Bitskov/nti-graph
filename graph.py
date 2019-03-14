@@ -17,7 +17,7 @@ class Point:
         self.ocupation = []  # Список команд, находящихся в данной точке (очередь)
 
     def __str__(self):
-        return "%s %i" % (self.name, self.delay_time)
+        return "%s(%i, %i) delay=%i" % (self.name, self.x, self.y, self.delay_time)
 
     def __eq__(self, other):
         return self.name == other.name
@@ -59,8 +59,8 @@ class Graph:
 
     def __str__(self):
         s = ""
-        for edge in self.edges:
-            s += str(edge) + "\n"
+        for point in self.points:
+            s += str(point) + "\n"
         return s
 
     def get_point(self, point):
