@@ -30,4 +30,4 @@ def hello():
     return "<h1>ЫЫЫЫ</h1>"
 
 
-app.run(port=25565)
+app.run(host="0.0.0.0", port=25565)
