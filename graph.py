@@ -227,7 +227,7 @@ def simulate(JSON):
     for key, way_obj in dict(json_obj['graphs']).items():
         way = Way.fromJSON(key, way_obj, graph)
         ways.append(way)
-    # print(graph)
+    print(graph)
     # print([way.name for way in ways])
     walk_result = simulate_walking(graph, ways)
     max_overload_time = 1 if sum([i for i in range(len(ways))]) == 0 else sum([i for i in range(len(ways))])
