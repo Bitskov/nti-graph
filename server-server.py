@@ -24,8 +24,8 @@ def test():
     #resp = (answer, 200)
     resp = make_response(answer)
     resp.headers['Access-Control-Allow-Origin'] = '*'
-    resp.headers['Access-Control-Allow-Headers'] = ""
-    resp.headers['Access-Control-Allow-Headers'] = ""
+    resp.headers['Access-Control-Allow-Headers'] = "Content-Type"
+    resp.headers['Access-Control-Allow-Methods'] = "POST, GET, OPTIONS"
     resp.headers['Content-Type'] = "application/json"
     return resp
 
