@@ -245,6 +245,14 @@ def simulate(JSON, cheat=False):
     n = len(graph.points)
     c = 100 / sum([i + 1 for i in range(len(graph.points))])
 
+    #Оценка эффективности
+    n = len(graph.points)
+    F = 0
+    for point in graph.points:
+        F += (1 - point.delay_time *  n / walk_result) * 100 / n
+
+    E2 = 0.4 * E + F * 0.6
+
     overloads = sorted([graph.points[i].overloaded_coeff for i in range(n)])[::-1]
 
     E1 = c * sum([(n - i) * overloads[i] for i in range(n)])
@@ -270,7 +278,7 @@ def simulate(JSON, cheat=False):
             graphs += ",\n"
         else:
             graphs += "\n"
-    graphs += "}, \"E\": %i, \n \"time\":%i" % (int(E1), int(walk_result))
+    graphs += "}, \"E\": %i, \n \"time\":%i" % (int(E2), int(walk_result))
     if walk_result >= 120:
         graphs += ",\"warning\": \"time limit exceeded\""
     graphs += "}"
